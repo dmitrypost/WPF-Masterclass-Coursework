@@ -4,24 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Contacts"
+        xmlns:uc="clr-namespace:Contacts.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="Contacts App" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
         <StackPanel>
             <TextBox x:Name="TextBoxSearch" TextChanged="TextBoxSearch_OnTextChanged"></TextBox>
-            <DataGrid x:Name="DataGridContacts" Height="100" MouseDoubleClick="DataGridContacts_MouseDoubleClick">
-                <!--<DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Click="OpenButton_Click">Open</Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
-            </DataGrid>
-
-            
+            <ListView x:Name="ContactsListView" SelectionChanged="ContactsListView_OnSelectionChanged">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <uc:ContactControl Contact="{Binding}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
             <Button Content="New Contact" Click="NewContact_Click"></Button>
-            
         </StackPanel>
     </Grid>
 </Window>

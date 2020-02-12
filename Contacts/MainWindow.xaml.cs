@@ -30,32 +30,27 @@ namespace Contacts
         private void RefreshContacts()
         {
             _contacts = _contactRepository.GetContacts().ToList();
-            DataGridContacts.ItemsSource = _contacts;
-            DataGridContacts.Columns[0].Visibility = Visibility.Hidden;
+            ContactsListView.ItemsSource = _contacts;
         }
 
         private void NewContact_Click(object sender, RoutedEventArgs e)
         {
             var newContactWindow = App.IocContainer.Resolve<ContactWindow>(new NamedParameter("contactId", 0));
             newContactWindow.ShowDialog();
+            RefreshContacts();
         }
-
-        private void OpenSelected()
+        
+        private void TextBoxSearch_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!(DataGridContacts.SelectedItem is Contact contact)) return;
+            ContactsListView.ItemsSource = _contacts.Where(x=>x.Name.ToLower().Contains(TextBoxSearch.Text.ToLower()));
+        }
+        
+        private void ContactsListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!(ContactsListView.SelectedItem is Contact contact)) return;
             var newContactWindow = App.IocContainer.Resolve<ContactWindow>(new NamedParameter("contactId", contact.Id));
             newContactWindow.ShowDialog();
             RefreshContacts();
-        }
-
-        private void DataGridContacts_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            OpenSelected();
-        }
-
-        private void TextBoxSearch_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            DataGridContacts.ItemsSource = _contacts.Where(x=>x.Name.ToLower().Contains(TextBoxSearch.Text.ToLower()));
         }
 
     }
